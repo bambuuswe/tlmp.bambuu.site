@@ -1,131 +1,289 @@
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TLMP Tracker | Dashboard</title>
-    <link rel="icon" href="icon.png" type="image/png">
+    <title>TLMP Utils | Tracker & Discord RPC</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         :root {
-            --bg: #0A0A0A;
-            --card: #121212;
-            --card2: #181818;
+            --bg: #050505;
+            --navbar-bg: rgba(5, 5, 5, 0.85);
+            --card: rgba(18, 18, 18, 0.7);
             --border: #262626;
-            --text: #F5F5F5;
-            --muted: #A0A0A0;
+            --text: #ffffff;
+            --muted: #a0a0a0;
             --accent: #C8FF00;
+            --discord: #5865F2; /* Discord brand color for hover effects */
+            --check: repeating-linear-gradient(45deg, #262626, #262626 5px, transparent 5px, transparent 10px);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html { scroll-behavior: smooth; }
+
         body { 
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
-            background-color: var(--bg); 
-            color: var(--text); 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg);
+            background-image: radial-gradient(circle at 2px 2px, #1a1a1a 1px, transparent 0);
+            background-size: 40px 40px;
+            color: var(--text);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        /* Navigering */
-        nav { 
-            padding: 1.5rem 2rem; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulseIcon {
+            0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(200, 255, 0, 0.2)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 15px rgba(200, 255, 0, 0.6)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(200, 255, 0, 0.2)); }
+        }
+
+        .fade-in { animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.3s; }
+        .delay-3 { animation-delay: 0.5s; }
+        .delay-4 { animation-delay: 0.7s; }
+
+        /* Navbar / Toolbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background: var(--navbar-bg);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            transition: all 0.3s ease;
         }
-        .logo { font-weight: 700; font-size: 1.5rem; color: var(--accent); }
-        nav a { color: var(--text); text-decoration: none; margin-left: 20px; font-size: 0.9rem; }
 
-        /* Container */
-        .container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
-
-        /* Cards & Stats */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
-        .card { 
-            background: var(--card); 
-            border: 1px solid var(--border); 
-            padding: 1.5rem; 
-            border-radius: 8px; 
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: var(--text);
         }
-        .card h3 { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; margin-bottom: 0.5rem; }
-        .card p { font-size: 1.8rem; font-weight: 600; }
 
-        /* Knappar */
-        .btn { 
-            display: inline-block; 
-            padding: 0.8rem 1.5rem; 
-            background: var(--accent); 
-            color: #000; 
-            text-decoration: none; 
-            border-radius: 4px; 
+        .custom-icon {
+            width: 35px;
+            height: 35px;
+            animation: pulseIcon 3s infinite ease-in-out;
+        }
+
+        .logo { font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; font-weight: 800; }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
             font-weight: 600;
-            margin-top: 1rem;
-            transition: opacity 0.2s;
-        }
-        .btn:hover { opacity: 0.8; }
-
-        /* Download sektion */
-        .download-box { 
-            background: var(--card2); 
-            padding: 2rem; 
-            border-radius: 8px; 
-            margin-top: 3rem;
-            text-align: center;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
         }
 
-        /* Footer */
-        footer { 
-            margin-top: 4rem; 
-            padding: 2rem; 
-            text-align: center; 
-            border-top: 1px solid var(--border); 
-            color: var(--muted); 
-            font-size: 0.8rem; 
+        .nav-links a:hover {
+            color: var(--accent);
+            transform: translateY(-2px);
         }
-        footer a { color: var(--muted); margin: 0 10px; }
+
+        /* Buttons */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: bold;
+            border: 2px solid var(--accent);
+            padding: 10px 24px;
+            border-radius: 6px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.08);
+            background: var(--accent);
+            color: var(--bg);
+            box-shadow: 0 10px 25px rgba(200, 255, 0, 0.3);
+        }
+
+        /* Layout */
+        .container { max-width: 1100px; margin: 0 auto; padding: 120px 20px 60px; }
+
+        h1, h2, h3 { letter-spacing: -1px; }
+        .accent { color: var(--accent); }
+
+        .check-header {
+            width: 100%;
+            height: 10px;
+            background: var(--check);
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+
+        /* Hero */
+        .hero { padding: 60px 0; text-align: center; }
+        .hero h1 { font-size: 5rem; font-weight: 800; margin-bottom: 20px; }
+        .hero p { font-size: 1.4rem; color: var(--muted); max-width: 700px; margin: 0 auto; }
+
+        /* Feature Cards */
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-top: 60px; }
+        
+        .card { 
+            background: var(--card);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border: 1px solid var(--border);
+            border-bottom: 4px solid var(--accent);
+            border-radius: 8px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+        
+        .card:hover { 
+            transform: translateY(-15px) scale(1.02); 
+            border-color: rgba(255, 255, 255, 0.3); 
+            box-shadow: 0 15px 40px rgba(200, 255, 0, 0.15); 
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        /* Special hover effect for the Discord card */
+        .card.discord-card:hover {
+            border-bottom-color: var(--discord);
+            box-shadow: 0 15px 40px rgba(88, 101, 242, 0.15);
+        }
+        .card.discord-card:hover .card-icon {
+            color: var(--discord);
+        }
+
+        .card:hover .card-icon {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .card h3 { margin-bottom: 15px; font-size: 1.5rem; }
+        .card p { color: var(--muted); }
+
+        /* Info Deep Dive */
+        .info-section { 
+            margin-top: 100px; 
+            padding: 60px; 
+            background: rgba(10, 10, 10, 0.7); 
+            border: 1px solid var(--border); 
+            border-radius: 8px;
+            transition: all 0.4s ease;
+        }
+
+        .info-section:hover {
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.02);
+            border-color: #333;
+        }
+
+        .info-section h2 { margin-bottom: 30px; font-size: 2.5rem; display: flex; align-items: center; gap: 15px; }
+        .info-section p { margin-bottom: 20px; color: var(--muted); }
+        .info-section strong { color: var(--text); }
+        
+        .bordered { border-top: 5px solid; border-image: var(--check) 30; }
+
+        footer { text-align: center; padding: 60px; border-top: 1px solid var(--border); margin-top: 100px; color: var(--muted); font-size: 0.9rem; }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; gap: 15px; padding: 20px; }
+            .nav-links { display: none; }
+            .hero h1 { font-size: 3.5rem; }
+            .container { padding-top: 160px; }
+        }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo">TLMP Tracker</div>
-        <div>
-            <a href="#stats">Dashboard</a>
-            <a href="#download">Ladda ner</a>
+    <nav class="navbar">
+        <a href="#" class="logo-container">
+            <img src="https://tlmp.bambuu.site/utils.png" alt="TLMP UtilsIcon" class="custom-icon" onerror="this.style.display='none'">
+            <div class="logo">TLMP<span class="accent"> UTILS</span></div>
+        </a>
+        
+        <div class="nav-links fade-in delay-1">
+            <a href="#features"><i class="fa-solid fa-microchip"></i> Features</a>
+            <a href="#architecture"><i class="fa-solid fa-server"></i> Application Core</a>
         </div>
+
+        <a href="/download" class="btn-primary fade-in delay-2">
+            <i class="fa-solid fa-download"></i> DOWNLOAD APP
+        </a>
     </nav>
 
     <div class="container">
-        <h1>Välkommen tillbaka, Förare</h1>
-        <p style="color:var(--muted)">Här är din senaste statistik från vägarna.</p>
+        
+        <header class="hero fade-in delay-1">
+            <div class="check-header"></div>
+            <h1>The Ultimate <span class="accent">Companion</span>.</h1>
+            <p>Elevate your Euro Truck Simulator 2 experience. TLMP Utils is a powerful desktop application featuring a high-precision telemetry tracker and a fully customizable Discord Rich Presence.</p>
+        </header>
 
-        <section id="stats" class="grid">
-            <div class="card">
-                <h3>Total sträcka</h3>
-                <p>-- km</p>
+        <section id="features" class="feature-grid">
+            <div class="card fade-in delay-2">
+                <i class="fa-solid fa-satellite-dish card-icon"></i>
+                <h3>Pro Telemetry Tracker</h3>
+                <p>Track your hauls with absolute precision. Our local agent hooks directly into the ETS2 memory stream, logging your miles, fuel usage, and cargo data seamlessly to your VTC.</p>
             </div>
-            <div class="card">
-                <h3>Aktuellt uppdrag</h3>
-                <p>Inget</p>
+            
+            <div class="card discord-card fade-in delay-3">
+                <i class="fa-brands fa-discord card-icon"></i>
+                <h3>Custom Discord RPC</h3>
+                <p>Show off your journey in style. Dynamically update your Discord status with your current location, cargo, destination, and truck model in real-time as you drive across Europe.</p>
             </div>
-            <div class="card">
-                <h3>Lastbilsskick</h3>
-                <p>-- %</p>
+            
+            <div class="card fade-in delay-4">
+                <i class="fa-solid fa-feather-pointed card-icon"></i>
+                <h3>Lightweight & Fast</h3>
+                <p>Built for performance. TLMP Utils runs quietly in the background with zero impact on your game's framerate, ensuring a buttery smooth trucking experience at all times.</p>
             </div>
         </section>
 
-        <section id="download" class="download-box">
-            <h2>Ladda ner Telemetri-agent</h2>
-            <p style="color:var(--muted); margin-bottom: 1rem;">Krävs för att skicka data till trackern.</p>
-            <a href="#" class="btn">Ladda ner Agent (v0.1.0)</a>
+        <section id="architecture" class="info-section bordered fade-in delay-4">
+            <h2><i class="fa-solid fa-toolbox accent"></i> Built for the Modern Trucker</h2>
+            <p><strong>Two Features, One Application:</strong> TLMP Utils replaces the need for multiple background programs. Whether you just want to log your company miles via the TrucklineMP API or flex your 70-ton Special Transport load on Discord, it's all handled by one highly optimized C# core.</p>
+            
+            <p><strong>How it works:</strong>
+            <br> <i class="fa-solid fa-arrow-right accent" style="font-size: 0.8rem; margin-right: 5px;"></i> <strong>1. Hook:</strong> The app reads live binary telemetry frames from the game memory.
+            <br> <i class="fa-solid fa-arrow-right accent" style="font-size: 0.8rem; margin-right: 5px;"></i> <strong>2. Sync:</strong> Cargo, map location, and truck health are processed locally.
+            <br> <i class="fa-solid fa-arrow-right accent" style="font-size: 0.8rem; margin-right: 5px;"></i> <strong>3. Broadcast:</strong> Data is split securely—tracking info goes to your VTC dashboard, while visual status updates are pushed instantly to your Discord client.</p>
+            
+            <p><strong>Privacy First:</strong> Your tracking history is safely managed, and the Discord RPC integration only displays what you allow it to. Total control over your footprint, right from the app settings.</p>
         </section>
     </div>
 
     <footer>
-        <p>&copy; 2026 Bambuu Customs</p>
-        <div style="margin-top: 10px;">
-            <a href="terms_of_servide.txt">Terms of Service</a>
-            <a href="privacy_policy.txt">Privacy Policy</a>
-        </div>
+        <p>&copy; 2026 Bambuu Customs | <i class="fa-solid fa-shield-halved"></i> Secured with end-to-end encryption</p>
     </footer>
 
 </body>
