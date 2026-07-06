@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TLMP Tracker | Dashboard</title>
+    <link rel="icon" href="icon.png" type="image/png">
+    <style>
+        :root {
+            --bg: #0A0A0A;
+            --card: #121212;
+            --card2: #181818;
+            --border: #262626;
+            --text: #F5F5F5;
+            --muted: #A0A0A0;
+            --accent: #C8FF00;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text); 
+            line-height: 1.6;
+        }
+
+        /* Navigering */
+        nav { 
+            padding: 1.5rem 2rem; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 1px solid var(--border);
+        }
+        .logo { font-weight: 700; font-size: 1.5rem; color: var(--accent); }
+        nav a { color: var(--text); text-decoration: none; margin-left: 20px; font-size: 0.9rem; }
+
+        /* Container */
+        .container { max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+
+        /* Cards & Stats */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .card { 
+            background: var(--card); 
+            border: 1px solid var(--border); 
+            padding: 1.5rem; 
+            border-radius: 8px; 
+        }
+        .card h3 { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; margin-bottom: 0.5rem; }
+        .card p { font-size: 1.8rem; font-weight: 600; }
+
+        /* Knappar */
+        .btn { 
+            display: inline-block; 
+            padding: 0.8rem 1.5rem; 
+            background: var(--accent); 
+            color: #000; 
+            text-decoration: none; 
+            border-radius: 4px; 
+            font-weight: 600;
+            margin-top: 1rem;
+            transition: opacity 0.2s;
+        }
+        .btn:hover { opacity: 0.8; }
+
+        /* Download sektion */
+        .download-box { 
+            background: var(--card2); 
+            padding: 2rem; 
+            border-radius: 8px; 
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer { 
+            margin-top: 4rem; 
+            padding: 2rem; 
+            text-align: center; 
+            border-top: 1px solid var(--border); 
+            color: var(--muted); 
+            font-size: 0.8rem; 
+        }
+        footer a { color: var(--muted); margin: 0 10px; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">TLMP Tracker</div>
+        <div>
+            <a href="#stats">Dashboard</a>
+            <a href="#download">Ladda ner</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Välkommen tillbaka, Förare</h1>
+        <p style="color:var(--muted)">Här är din senaste statistik från vägarna.</p>
+
+        <section id="stats" class="grid">
+            <div class="card">
+                <h3>Total sträcka</h3>
+                <p>-- km</p>
+            </div>
+            <div class="card">
+                <h3>Aktuellt uppdrag</h3>
+                <p>Inget</p>
+            </div>
+            <div class="card">
+                <h3>Lastbilsskick</h3>
+                <p>-- %</p>
+            </div>
+        </section>
+
+        <section id="download" class="download-box">
+            <h2>Ladda ner Telemetri-agent</h2>
+            <p style="color:var(--muted); margin-bottom: 1rem;">Krävs för att skicka data till trackern.</p>
+            <a href="#" class="btn">Ladda ner Agent (v0.1.0)</a>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Bambuu Customs</p>
+        <div style="margin-top: 10px;">
+            <a href="terms_of_servide.txt">Terms of Service</a>
+            <a href="privacy_policy.txt">Privacy Policy</a>
+        </div>
+    </footer>
+
+</body>
+</html>
