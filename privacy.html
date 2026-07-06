@@ -3,11 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Privacy Policy | Bambuu Customs</title>
+<title>Privacy Policy | TLMP Tracker</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
+:root{
+    --bg:#0A0A0A;
+    --card:#121212;
+    --card2:#181818;
+    --border:#262626;
+    --text:#F5F5F5;
+    --muted:#A0A0A0;
+    --accent:#8FE34F;
+}
+
 *{
     margin:0;
     padding:0;
@@ -16,53 +31,64 @@
 
 body{
     font-family:'Inter',sans-serif;
-    background:#0b0f18;
-    color:#edf3ff;
+    background: radial-gradient(circle at top,#151515 0%, var(--bg) 60%);
+    color:var(--text);
     line-height:1.8;
 }
 
 header{
-    background:linear-gradient(135deg,#2563eb,#1d4ed8);
-    padding:70px 20px;
     text-align:center;
+    padding:90px 20px 60px;
+    border-bottom:1px solid var(--border);
+    animation:fadeDown .8s ease;
 }
 
 header h1{
-    font-size:3rem;
-    font-weight:700;
+    font-size:clamp(2.2rem,5vw,3.2rem);
+    font-weight:800;
+    letter-spacing:-1px;
 }
 
 header p{
     margin-top:12px;
-    opacity:.9;
+    color:var(--muted);
 }
 
 .container{
-    max-width:1000px;
-    margin:50px auto;
-    padding:0 25px;
+    max-width:1050px;
+    margin:auto;
+    padding:50px 20px;
 }
 
 .card{
-    background:#111827;
-    border:1px solid #1f2937;
+    background:linear-gradient(180deg,var(--card),var(--card2));
+    border:1px solid var(--border);
     border-radius:18px;
-    padding:35px;
-    box-shadow:0 15px 40px rgba(0,0,0,.4);
+    padding:40px;
+    transition:.25s ease;
+    animation:fadeUp .8s ease;
+}
+
+.card:hover{
+    transform:translateY(-6px);
+    border-color:rgba(143,227,79,.35);
+    box-shadow:0 20px 50px rgba(0,0,0,.5);
 }
 
 h2{
-    color:#60a5fa;
     margin-top:35px;
-    margin-bottom:12px;
+    margin-bottom:10px;
+    color:var(--accent);
+    font-size:1.35rem;
 }
 
-h2:first-child{
-    margin-top:0;
+p,li{
+    color:#d6d6d6;
 }
 
 ul{
     margin-left:22px;
+    margin-top:10px;
 }
 
 li{
@@ -73,10 +99,38 @@ strong{
     color:#ffffff;
 }
 
+code{
+    background:#1e1e1e;
+    border:1px solid #2a2a2a;
+    padding:3px 6px;
+    border-radius:6px;
+    color:var(--accent);
+}
+
 footer{
     text-align:center;
-    padding:35px;
-    color:#94a3b8;
+    padding:40px;
+    border-top:1px solid var(--border);
+    color:var(--muted);
+    margin-top:50px;
+}
+
+/* animations */
+@keyframes fadeUp{
+    from{opacity:0; transform:translateY(25px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+@keyframes fadeDown{
+    from{opacity:0; transform:translateY(-20px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+/* mobile */
+@media(max-width:700px){
+    .card{
+        padding:25px;
+    }
 }
 </style>
 </head>
@@ -98,54 +152,40 @@ This Privacy Policy describes how we handle and protect the data collected throu
 
 <h2>1. Data Collection</h2>
 
-<p>
-The Service collects three types of data:
-</p>
+<p>The Service collects three types of data:</p>
 
 <ul>
-
-<li><strong>Telemetry Data:</strong> Information from Euro Truck Simulator 2 (ETS2) collected via your local telemetry agent. This includes:
-<ul>
-<li>Driving Data: Total mileage (odometer), speed, vehicle status (damage), and location markers.</li>
-
-<li>Job & Economic Data: Current job status, cargo information, and detailed income/financial records from your in-game activities.</li>
-
-<li>Session Statistics: Average speed, driving time, and historical performance trends.</li>
-</ul>
+<li><strong>Telemetry Data:</strong> Information from Euro Truck Simulator 2 (ETS2) collected via your local telemetry agent:
+    <ul>
+        <li>Driving Data: Total mileage, speed, damage, and location markers.</li>
+        <li>Job & Economic Data: Cargo, job status, and income records.</li>
+        <li>Session Statistics: Average speed, driving time, performance trends.</li>
+    </ul>
 </li>
 
-<li><strong>Authentication Data:</strong> When you log in via TrucklineMP (OAuth), we access your public profile information (username) and information about your connected VTC (Virtual Trucking Company), in accordance with the scopes you have authorized (<code>profile</code> and <code>vtc:read</code>).</li>
-
+<li><strong>Authentication Data:</strong> When you log in via TrucklineMP (OAuth), we access your public profile (<code>profile</code>) and VTC data (<code>vtc:read</code>).</li>
 </ul>
 
 <h2>2. Usage of Data</h2>
 
-<p>
-We use the collected data exclusively to:
-</p>
-
 <ul>
-<li>Display your real-time statistics and historical driving data on your dashboard.</li>
-
-<li>Calculate and visualize your economic progress, earnings, and goals.</li>
-
-<li>Present accurate information regarding your VTC membership and performance.</li>
-
-<li>Analyze session data to help you improve your driving efficiency.</li>
+<li>Display real-time statistics and driving history</li>
+<li>Calculate economic progress and earnings</li>
+<li>Show VTC performance data</li>
+<li>Analyze driving sessions for improvement</li>
 </ul>
 
 <h2>3. Storage and Security</h2>
 
 <ul>
-<li><strong>Local Storage:</strong> Your driving, financial, and session history is stored locally on your server instance.</li>
-
-<li><strong>No Sale of Data:</strong> We do not sell, rent, or share your personal data, telemetry, or economic data with third parties.</li>
+<li><strong>Local Storage:</strong> Data is stored on your server instance</li>
+<li><strong>No Sale of Data:</strong> We never sell or share personal data</li>
 </ul>
 
 <h2>4. Copyright and Rights</h2>
 
 <p>
-© 2026 Bambuu Customs. All data integrated via the TrucklineMP API remains property under the license terms of © 2026 TrucklineMP.
+© 2026 Bambuu Customs. All TrucklineMP API data remains under TrucklineMP licensing terms.
 </p>
 
 </div>
